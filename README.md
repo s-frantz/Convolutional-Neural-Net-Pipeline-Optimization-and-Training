@@ -40,8 +40,8 @@ def MobileNetV2_CNN(latestModel, testSlice, numImages, pct_Barns=None):
             prediction = predictions[i][0]
             pDict[imageId] = prediction
     
-    # # Score normalization redacted - if user doesn't enter then this is 0 by default
-    adjustedBreakeven_Scores = someStatisticalFunction(pDict.values())
+    # #
+    adjustedBreakeven_Scores = redactedNormalizationFunction(pDict.values())
     # #
     
     pDict_detailed = {}    
@@ -57,3 +57,17 @@ def MobileNetV2_CNN(latestModel, testSlice, numImages, pct_Barns=None):
         pDict_detailed[imgOid] = (structureClass, 100*round(confidence_0to1*0.5+0.5, 3))
             
     return pDict_detailed
+
+# norm function redacted from above code for readability
+    if pct_Barns == None:
+        adjustedBreakeven_Scores = 0
+    else:
+        mean_Scores = sum(guesses)/len(guesses)
+        range_Scores = max(guesses)-min(guesses)
+        centerRange_Scores = (max(guesses)+min(guesses))*.5
+        skew_Scores = centerRange_Scores - mean_Scores
+        #adjustedBreakeven_Scores = (1-pct_Barns) * centerRange_Scores * 2 - skew_Scores * 0.5  #assumes less:barn, more:house
+        adjustedMean_Scores = centerRange_Scores - skew_Scores/2
+        breakeven_Adjustment = (pct_Barns - 0.5) * 2
+        adjustedBreakeven_Scores = adjustedMean_Scores + breakeven_Adjustment * range_Scores/2
+        print("Adjusted breakeven score for " + str(100*pct_Barns) + " pct barns: " + str(adjustedBreakeven_Scores))
