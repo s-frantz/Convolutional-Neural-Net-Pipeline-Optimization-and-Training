@@ -6,7 +6,7 @@ Since the two types of structures classified (residential, aka 'house', and non-
 
 Also, although a variety of regions were sampled for training data (planimetrics we had received from consultants for some of our prior project areas around the country), regional skewing should still be expected based on visible light profiles. To counter this, I added an option to normalize scores to a specific percentage of 'residential' structures. The GIS analysts user would simply enter their estimate (generally around 30-50%) and the scoring system would enforce it.
 
-The code used in production to convert from raw image files to the numpy-based, and more optimized TFRecord format is also added. Below are a few snippets I can share on the implementation of running the model over each 'TFRecord'.
+The code used in production to convert from raw image files to the numpy-based, optimized TFRecord format is also added. Below are a few snippets I can share on the implementation of generating model predictions for each 'TFRecord'.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
@@ -39,5 +39,21 @@ def MobileNetV2_CNN(latestModel, testSlice, numImages, pct_Barns=None):
             imageId = tensorToString(imageIds[i])
             prediction = predictions[i][0]
             pDict[imageId] = prediction
+    
+    # # Score normalization redacted - if user doesn't enter then this is 0 by default
+    adjustedBreakeven_Scores = someStatisticalFunction(pDict.values())
+    # #
+    
+    pDict_detailed = {}    
+    for img, score in pDict.items():
+        imgOid = int(img.split('_')[1].split('.')[0])
+        if score < adjustedBreakeven_Scores:
+            structureClass = 'barn'
+            confidence_0to1 = (adjustedBreakeven_Scores-score)/distance_to_min
+        else:
+            structureClass = 'house'
+            confidence_0to1 = (score-adjustedBreakeven_Scores)/distance_to_max
+
+        pDict_detailed[imgOid] = (structureClass, 100*round(confidence_0to1*0.5+0.5, 3))
             
-    return pDict
+    return pDict_detailed
