@@ -39,3 +39,5 @@ def MobileNetV2_CNN(latestModel, testSlice, numImages, pct_Barns=None):
             imageId = tensorToString(imageIds[i])
             prediction = predictions[i][0]
             pDict[imageId] = prediction
+            
+    return pDict
