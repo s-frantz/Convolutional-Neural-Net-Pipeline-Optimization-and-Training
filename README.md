@@ -6,7 +6,7 @@ Since the two types of structures classified (residential, aka 'house', and non-
 
 Also, although a variety of regions were sampled for training data (planimetrics we had received from consultants for some of our prior project areas around the country), regional skewing should still be expected based on visible light profiles. To counter this, I added an option to normalize scores to a specific percentage of 'residential' structures. The GIS analysts user would simply enter their estimate (generally around 30-50%) and the scoring system would enforce it.
 
-The code used in production to convert from raw image files to the numpy-based, optimized TFRecord format is also added. Below are a few snippets I can share on the implementation of generating model predictions for each 'TFRecord'.
+The code used in production to convert from raw image files to the optimized TFRecord matrix format is also added. Below are a few snippets I can share on the implementation of generating model predictions for each 'TFRecord'.
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
