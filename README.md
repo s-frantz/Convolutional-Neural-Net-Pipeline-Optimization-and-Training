@@ -1,6 +1,6 @@
 # Convolutional-Neural-Net-Pipeline-Optimization-and-Training
 
-Keyword: scratch... I have no doubt this is very messy code, but a notebook style approach proved very effective for getting the intial building classification model off the ground. If these training steps were to be put into production, the code should be heavily refactored.
+This notebook style approach proved very effective for getting the intial building classification model off the ground. If these training steps were to be put into production, the code should be heavily refactored.
 
 Since the two types of structures classified (residential, aka 'house', and non-residential aka 'barn') have significant overlap in appearance in the real world, I considered a training accuracy of 79 and validation accurace of 68 to be relatively good!
 
